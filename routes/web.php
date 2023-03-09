@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::middleware(['role:admin'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    });
+
+    // Category routes
     Route::get('categories/create',[CategoryController::class,'create']);
     Route::post('categories/create',[CategoryController::class,'postCreate']);
     Route::get('category-list',[CategoryController::class,'list']);
@@ -25,9 +31,9 @@ Route::middleware(['role:admin'])->group(function () {
     Route::get('edit-category',[CategoryController::class,'edit']);
     Route::post('edit-category',[CategoryController::class,'postEdit']);
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    });
+    // product routes
+    Route::get('products/create',[ProductController::class,'create']);
+    Route::post('products/create',[ProductController::class,'postCreate']);
 });
 
 require __DIR__.'/auth.php';
