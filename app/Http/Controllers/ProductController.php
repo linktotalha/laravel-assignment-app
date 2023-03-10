@@ -85,24 +85,19 @@ class ProductController extends Controller
         return response()->json(['product'=>$product]);
     }
 
-    public function postEdit(Request $req){
-        $data = $req->all();
-        $product = Product::find($req->edit_id);
-        $pro_cat = ProductCategory::where('product_id',$product->id)->get();
+    // public function postEdit(Request $req){
+    //     $data = $req->all();
+    //     $product = Product::find($req->edit_id);
+    //     $pro_cat = ProductCategory::where('product_id',$product->id)->get();
 
-        foreach($data['edit_category'] as $cat){
-            $pro_cat->update([
-                'category_id'=>$data['edit_category']
-            ]);
-        }
-        return $pro_cat;
+    //     return $pro_cat;
 
-        foreach($product->categories()->get() as $category){
-           $category->category_id = $data['edit_category'];
+    //     foreach($product->categories()->get() as $category){
+    //        $category->category_id = $data['edit_category'];
 
-        }
-        $product->save();
-        $product->categories()->update($data['edit_category']);
-        return $product->categories()->get();
-    }
+    //     }
+    //     $product->save();
+    //     $product->categories()->update($data['edit_category']);
+    //     return $product->categories()->get();
+    // }
 }
