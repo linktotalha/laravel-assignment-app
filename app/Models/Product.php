@@ -11,9 +11,9 @@ class Product extends Model
     protected $guarded = [];
 
     public function images() {
-        return $this->morphMany(Mediaable::class,'mediaable');
+        return $this->hasMany(Mediaable::class,'product_id');
     }
     public function categories() {
-        return $this->morphMany(ProductCategory::class,'productcategory');
+        return $this->hasMany(ProductCategory::class,'product_id');
     }
 }

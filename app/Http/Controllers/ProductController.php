@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use App\Models\Product;
 use App\Models\Mediaable;
 use App\Models\Category;
+use App\Models\ProductCategory;
 use Validator;
 
 class ProductController extends Controller
@@ -40,7 +41,8 @@ class ProductController extends Controller
 
         foreach($req->category as $category){
             $product->categories()->create([
-                'category_id'=>$category
+                'category_id'=>$category,
+                'product_id'=>$product->id
             ]);
         }
         
@@ -86,15 +88,21 @@ class ProductController extends Controller
     public function postEdit(Request $req){
         $data = $req->all();
         $product = Product::find($req->edit_id);
-        // return $product->categories()->get();
-        if(isset($data['edit_category'])){
-            $product->categories()->update($data['edit_category']);
+        $pro_cat = ProductCategory::where('product_id',$product->id)->get();
+
+        foreach($data['edit_category'] as $cat){
+            $pro_cat->update([
+                'category_id'=>$data['edit_category']
+            ]);
         }
-        return $product;
-        // $category->update([
-        //     'name'=>$req->edit_name,
-        //     'desc'=>$req->edit_desc
-        // ]);
-        // return response()->json(['message'=>'Data updated successfully']);
+        return $pro_cat;
+
+        foreach($product->categories()->get() as $category){
+           $category->category_id = $data['edit_category'];
+
+        }
+        $product->save();
+        $product->categories()->update($data['edit_category']);
+        return $product->categories()->get();
     }
 }
