@@ -13,4 +13,7 @@ class Product extends Model
     public function images() {
         return $this->morphMany(Mediaable::class,'mediaable');
     }
+    public function categories() {
+        return $this->morphMany(ProductCategory::class,'productcategory');
+    }
 }

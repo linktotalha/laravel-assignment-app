@@ -17,7 +17,6 @@ class CreateMediaablesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('product_id');
             $table->string('image');
-            $table->morphs('mediaable');
             $table->timestamps();
         });
     }
