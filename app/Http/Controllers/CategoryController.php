@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
+use Yajra\DataTables\Facades\DataTables;
 use Validator;
 
 class CategoryController extends Controller
@@ -31,8 +32,10 @@ class CategoryController extends Controller
         return response()->json(['message'=>"Data created successfully"]);
     }
     public function list() {
-        $categories = Category::all();
-        return response()->json(['data'=>$categories]);
+        // $categories = Category::all();
+        // return response()->json(['data'=>$categories]);
+
+        return DataTables::of(Category::query())->make(true);
     }
 
     public function delete(Request $req){
