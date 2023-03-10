@@ -74,12 +74,9 @@
 @endsection
 
 @section('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
-        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <script>
         // Add data using ajax
-        $.noConflict();
-        $("document").ready(function() {
+        $(document).ready(function() {
             $("#submitBtn").click(function() {
                 $.ajaxSetup({
                     headers: {
