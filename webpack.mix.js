@@ -13,5 +13,16 @@ const mix = require('laravel-mix');
 
 mix.js('resources/js/app.js', 'public/js')
     .postCss('resources/css/app.css', 'public/css', [
-        //
+        
     ]);
+
+    mix.scripts([
+        'resources/theme/js/bundle.js',
+        'resources/theme/js/scripts.js',
+        'resources/theme/js/gd-default.js',
+    ], 'public/js/theme.js');
+
+    mix.styles([
+        'resources/theme/css/dashlite.css',
+        'resources/theme/css/theme.css',
+    ], 'public/css/theme.css');
