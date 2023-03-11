@@ -33,14 +33,6 @@ Route::middleware(['role:admin'])->group(function () {
         return view('dashboard');
     });
 
-    // product routes
-    // Route::get('products/create',[ProductController::class,'create']);
-    // Route::post('products/create',[ProductController::class,'postCreate']);
-    // Route::get('product-list',[ProductController::class,'list']);
-    // Route::get('delete-product',[ProductController::class,'delete']);
-    // Route::get('edit-product',[ProductController::class,'edit']);
-    // Route::post('edit-product',[ProductController::class,'postEdit']);
-    // Route::get('product-hello',[ProductController::class,'delete']);
 });
 
 require __DIR__.'/auth.php';
