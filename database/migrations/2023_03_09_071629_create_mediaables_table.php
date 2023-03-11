@@ -15,7 +15,7 @@ class CreateMediaablesTable extends Migration
     {
         Schema::create('mediaables', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
+            $table->bigInteger('product_id')->unsigned();
             $table->string('image');
             $table->timestamps();
         });
