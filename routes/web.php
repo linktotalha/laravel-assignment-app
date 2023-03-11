@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CategoryCon;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,12 +19,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/hello',function() {
-    return view('hello');
-});
+// routes only accessable by admin using package spatie
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::middleware(['role:admin'])->group(function () {
+    Route::resource('categories',CategoryCon::class);
+    Route::get('category-list',[CategoryCon::class,'getAllCategories']);
+
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    });
 });
 
 require __DIR__.'/auth.php';

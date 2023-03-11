@@ -2,5 +2,10 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/js/theme.js": "/js/theme.js",
-    "/css/theme.css": "/css/theme.css"
+    "/js/jquery.min.js": "/js/jquery.min.js",
+    "/js/toastr.js": "/js/toastr.js",
+    "/js/jquery.dataTables.js": "/js/jquery.dataTables.js",
+    "/css/theme.css": "/css/theme.css",
+    "/css/toastr.css": "/css/toastr.css",
+    "/css/jquery.dataTables.css": "/css/jquery.dataTables.css"
 }

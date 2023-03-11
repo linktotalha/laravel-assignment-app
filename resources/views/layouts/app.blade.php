@@ -11,8 +11,9 @@
     <link rel="shortcut icon" href="{{asset('images/favicon.png')}}">
     <!-- Page Title  -->
     <title>CRM</title>
-    <!-- StyleSheets  -->
     <link rel="stylesheet" href="{{mix('css/theme.css')}}">
+    <link rel="stylesheet" href="{{mix('css/toastr.css')}}">
+    <link rel="stylesheet" href="{{mix('css/jquery.dataTables.css')}}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
     div.dataTables_wrapper div.dataTables_length select {
@@ -69,15 +70,15 @@
                                     <h6 class="overline-title text-primary-alt">Dashboards</h6>
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-item">
-                                    <a href="html/index.html" class="nk-menu-link">
+                                    <a href="{{url('categories')}}" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-dashlite"></em></span>
-                                        <span class="nk-menu-text">Default Dashboard</span>
+                                        <span class="nk-menu-text">Categories</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-item">
-                                    <a href="html/index-crypto.html" class="nk-menu-link">
+                                    <a href="{{url('products/create')}}" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-bitcoin-cash"></em></span>
-                                        <span class="nk-menu-text">Crypto Dashboard</span>
+                                        <span class="nk-menu-text">Products</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 <li class="nk-menu-item">
@@ -813,8 +814,11 @@
     </div>
 
     <!-- JavaScript -->
+    <script src="{{mix('js/jquery.min.js')}}"></script>
     <script src="{{mix('js/theme.js')}}"></script>
-    {{-- @stack('scripts') --}}
+    <script src="{{mix('js/toastr.js')}}"></script>
+    <script src="{{mix('js/jquery.dataTables.js')}}"></script>
+    @yield('scripts')
 </body>
 
 </html>
