@@ -63,7 +63,7 @@ class CategoryCon extends Controller
      */
     public function show($id)
     {
-        return "show";
+        // 
     }
 
     /**

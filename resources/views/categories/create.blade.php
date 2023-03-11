@@ -19,7 +19,6 @@
                                 <div class="form-group">
                                     <label for="">Category</label>
                                     <input type="text" name="edit_name" class="form-control" id="">
-                                    <input type="hidden" name="edit_id" class="form-control" id="">
                                     <span class="nameErr text-danger"></span>
                                 </div>
                                 <div class="form-group">
@@ -74,12 +73,9 @@
 @endsection
 
 @section('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
-        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <script>
         // Add data using ajax
-        $.noConflict();
-        $("document").ready(function() {
+        $(document).ready(function() {
             $("#submitBtn").click(function() {
                 $.ajaxSetup({
                     headers: {
@@ -88,7 +84,7 @@
                 });
                 $.ajax({
                     method: "POST",
-                    url: "{{ url('categories/create') }}",
+                    url: "{{ url('categories') }}",
                     data: $("#submitForm").serialize(),
                     success: function(res) {
                         if (res.errors) {
@@ -98,6 +94,8 @@
                         if (res.message) {
                             toastr.success(res.message);
                             $('#submitForm').trigger("reset");
+                            $(".nameErr").html("");
+                            $(".descErr").html("");
                             table.ajax.reload();
                         }
                     }
@@ -105,16 +103,13 @@
 
             });
 
-            // Get data using ajax
             var table = $('#categories').DataTable({
                 processing: true,
+                serverSide: true,
                 ajax: "{{ url('category-list') }}",
-                columns: [{
-                        data: 'name'
-                    },
-                    {
-                        data: 'desc'
-                    },
+                columns: [
+                    {data: 'name', name: 'name'},
+                    {data: 'desc', name: 'desc'},
                     {
                         "data": null,
                         render: function(data, type, row) {
@@ -133,8 +128,11 @@
             // Edit Category display values in modal
 
             $(document).on('click', '#editCat', function() {
+                var cat_id =  $(this).data('id');
+                var url="{{url('/')}}/";
                 $.ajax({
-                    url: "{{ url('edit-category') }}",
+                    url: url+"categories"+"/"+cat_id+"/edit",
+                    method: "GET",
                     data: {
                         "id": $(this).data('id')
                     },
@@ -142,17 +140,22 @@
                         $('input[name="edit_id"]').val(res.category.id);
                         $('input[name="edit_name"]').val(res.category.name);
                         $('textarea[name="edit_desc"]').val(res.category.desc);
+                        $('#updateCategory').val(res.category.id);
                     }
                 });
             });
 
             // Delete data using ajax
             $(document).on('click', '#deleteBtn', function() {
+                var url = "{{url('/')}}/";
+                var token = $("meta[name='csrf-token']").attr("content");
                 if (confirm("Are you sure you want to delete??")) {
                     $.ajax({
-                        url: "{{ url('delete-category') }}",
+                        url: url+"categories"+"/"+$(this).data('id'),
+                        type: "DELETE",
                         data: {
-                            "id": $(this).data('id')
+                            "id": $(this).data('id'),
+                            "_token":token
                         },
                         success: function(res) {
                             toastr.success(res.message);
@@ -164,13 +167,13 @@
 
             // update the category
             $(document).on('click','#updateCategory',function() {
+                var url = "{{url('/')}}/";
                 if(confirm('Are you sure you want to update')){
                     $.ajax({
-                        url: "{{ url('edit-category') }}",
-                        method: "POST",
+                        url: url+"categories"+"/"+$(this).val(),
                         data: $("#updateForm").serialize(),
                         success: function(res){
-                            console.log(res);
+                            toastr.success(res.message);
                             table.ajax.reload();
                             $('#exampleModal').modal('hide');
                         }

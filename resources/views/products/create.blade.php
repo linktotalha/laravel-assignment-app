@@ -119,11 +119,8 @@
 @endsection
 
 @section('scripts')
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
-        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <script>
         // Add data using ajax
-        $.noConflict();
 
         $(document).ready(function() {
 
@@ -131,14 +128,13 @@
                 e.preventDefault();
                 $.ajax({
                     method: "POST",
-                    url: "{{ url('products/create') }}",
+                    url: "{{ url('products') }}",
                     data: new FormData(this),
                     dataType: 'JSON',
                     contentType: false,
                     cache: false,
                     processData: false,
                     success: function(res) {
-                        console.log(res.errors);
                         if (res.errors) {
                             $(".nameErr").html(res.errors.name);
                             $(".priceErr").html(res.errors.price);
@@ -159,22 +155,14 @@
 
             // get products from data ajax
 
-
             var table = $('#products').DataTable({
                 processing: true,
+                serverSide: true,
                 ajax: "{{ url('product-list') }}",
-                columns: [{
-                        data: 'name'
-                    },
-                    {
-                        data: 'price'
-                    },
-                    // {
-                    //     data: ''
-                    // },
-                    {
-                        data: 'desc'
-                    },
+                columns: [
+                    {data: 'name', name: 'name'},
+                    {data: 'price', name: 'price'},
+                    {data: 'desc', name: 'desc'},
                     {
                         "data": null,
                         render: function(data, type, row) {
@@ -193,11 +181,15 @@
             // Delete Product using ajax
 
             $(document).on('click', '#deleteBtn', function() {
+                var url = "{{url('/')}}/";
+                var token = $("meta[name='csrf-token']").attr("content");
                 if (confirm("Are you sure you want to delete??")) {
                     $.ajax({
-                        url: "{{ url('delete-product') }}",
+                        url: url+"products"+"/"+$(this).data('id'),
+                        type: "DELETE",
                         data: {
-                            "id": $(this).data('id')
+                            "id": $(this).data('id'),
+                            "_token":token
                         },
                         success: function(res) {
                             console.log(res);
@@ -211,18 +203,15 @@
             // Edit Products
 
             $(document).on('click', '#editPro', function() {
+                var cat_id =  $(this).data('id');
+                var url="{{url('/')}}/";
                 $.ajax({
-                    url: "{{ url('edit-product') }}",
+                    url: url+"products"+"/"+cat_id+"/edit",
+                    method: "GET",
                     data: {
                         "id": $(this).data('id')
                     },
                     success: function(res) {
-                        console.log(res.categories)
-                        $(res.product[0].images).each(function(index,element){
-
-
-                        });
-
                         $("#edit_cat option").each(function(index,element){
                             $(res.product[0].categories).each(function(i,e){
                                 if(parseInt(element.value) == e.category_id){
@@ -242,15 +231,12 @@
             });
 
             $(document).on('click','#updatePro',function() {
+                var url="{{url('/')}}/";
                 if(confirm('Are you sure you want to update')){
-                    // $.ajaxSetup({
-                    // headers: {
-                    //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    // }
-                    // });
+                   
                     $.ajax({
-                        url: "{{ url('edit-product') }}",
-                        method: "POST",
+                        url: url+"products"+"/"+$(this).val(),
+
                         data: $("#updateForm").serialize(),
                         // dataType: 'JSON',
                         // contentType: false,
@@ -258,8 +244,8 @@
                         // processData: false,
                         success: function(res){
                             console.log(res);
-                            // table.ajax.reload();
-                            // $('#exampleModal').modal('hide');
+                            table.ajax.reload();
+                            $('#exampleModal').modal('hide');
                         }
                     });
                 }
