@@ -9,6 +9,8 @@ use Illuminate\Support\Str;
 use App\Models\Product;
 use App\Models\Mediaable;
 use App\Models\Category;
+use App\Models\Image;
+use App\Models\ProductImage;
 use App\Models\ProductCategory;
 use Yajra\DataTables\Facades\DataTables;
 use Validator;
@@ -64,18 +66,17 @@ class ProductCon extends Controller
         ]);
 
         foreach($request->category as $category){
-            $product->categories()->create([
-                'category_id'=>$category,
-            ]);
+            $product->categories()->attach($category);
         }
+
 
         // multiple images
         foreach($request->image as $image){
-            $imageName = Str::random(4).time().'.'.$image->extension();
-            $image->move(public_path('images'), $imageName);
-            $product->images()->create([
-                'image'=>$imageName
-            ]);
+            // $path = $image->store('public/images');
+            $imageName = time().Str::random(4)."_".$image->getClientOriginalName();
+            $image->move(public_path('images'),$imageName);
+            $image = Image::create(['image' => $imageName]);
+            $product->images()->attach($image);
         }
 
         
@@ -143,8 +144,8 @@ class ProductCon extends Controller
                 File::delete(public_path('images/').$image->image);
             }
         }
-        $product->categories()->delete();
-        $product->images()->delete();
+        $product->categories()->detach();
+        $product->images()->detach();
         $product->delete();
         return response()->json(['message'=>"Data deleted successfully"]);
     }
