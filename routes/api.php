@@ -17,5 +17,8 @@ use App\Http\Controllers\api\ApiController;
 Route::post("register",[ApiController::class,'register']);
 
 Route::middleware('auth:sanctum')->group(function() {
-
+    Route::get('single-category/{id}',[ApiController::class,'getSingleCategory']);
+    Route::get('all-categories',[ApiController::class,'getAllCategories']);
+    Route::get('single-product/{id}',[ApiController::class,'getSingleProduct']);
+    Route::get('all-products',[ApiController::class,'getAllProducts']);
 });

@@ -12,6 +12,7 @@ class Category extends Model
     protected $fillable = [
         'name','desc','user_id'
     ];
+    protected $hidden = ['pivot'];
 
     public function products()
     {

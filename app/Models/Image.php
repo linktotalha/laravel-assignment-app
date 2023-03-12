@@ -9,6 +9,7 @@ class Image extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    protected $hidden = ['pivot'];
     public function products()
     {
         return $this->belongsToMany(Product::class);
