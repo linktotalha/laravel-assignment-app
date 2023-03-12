@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryCon;
 use App\Http\Controllers\ProductCon;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\frontendController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,12 @@ Route::middleware(['role:admin'])->group(function () {
     });
 
 });
+
+Route::get('category-list',[frontendController::class,'categoryList']);
+Route::get('category_products/{id}',[frontendController::class,'categoryproducts']);
+Route::get('product-detail-page/{id}',[frontendController::class,'productdetails']);
+Route::post('add_comment',[frontendController::class,'addcomment']);
+Route::get('comments/{id}',[frontendController::class,'showComments']);
 
 
 require __DIR__.'/auth.php';

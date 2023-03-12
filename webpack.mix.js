@@ -27,6 +27,10 @@ mix.js('resources/js/app.js', 'public/js')
     ], 'public/js/jquery.min.js');
 
     mix.scripts([
+        'resources/theme/js/bootstrap.min.js',
+    ], 'public/js/bootstrap.js');
+
+    mix.scripts([
         'resources/theme/js/jquery.dataTables.min.js',
     ], 'public/js/jquery.dataTables.js');
 
@@ -46,3 +50,7 @@ mix.js('resources/js/app.js', 'public/js')
     mix.styles([
         'resources/theme/css/toastr.min.css',
     ], 'public/css/toastr.css');
+
+    mix.styles([
+        'resources/theme/css/bootstrap.min.css',
+    ], 'public/css/bootstrap.css');
