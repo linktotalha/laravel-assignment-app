@@ -107,7 +107,6 @@
                     <tr>
                         <td>Name</td>
                         <td>Price</td>
-                        {{-- <td>Categories</td> --}}
                         <td>Description</td>
                         <td>Edit</td>
                         <td>Delete</td>
@@ -238,10 +237,6 @@
                         url: url+"products"+"/"+$(this).val(),
 
                         data: $("#updateForm").serialize(),
-                        // dataType: 'JSON',
-                        // contentType: false,
-                        // cache: false,
-                        // processData: false,
                         success: function(res){
                             console.log(res);
                             table.ajax.reload();
@@ -252,27 +247,6 @@
             });
 
             // 
-
-            // $("#updateForm").on('submit',function(e){
-            //     e.preventDefault();
-            //     if(confirm('Are you sure you want to update')){
-            //         $.ajax({
-            //             url: "{{ url('edit-product') }}",
-            //             method: "POST",
-            //             data: new FormData(this),
-            //             dataType: 'JSON',
-            //             contentType: false,
-            //             cache: false,
-            //             processData: false,
-            //             success: function(res){
-            //                 console.log(res);
-            //                 table.ajax.reload();
-            //                 $('#exampleModal').modal('hide');
-            //             }
-            //         });
-            //     }
-                
-            // });
 
 
         });
