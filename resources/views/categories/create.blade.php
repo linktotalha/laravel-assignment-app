@@ -128,7 +128,8 @@
             // Edit Category display values in modal
 
             $(document).on('click', '#editCat', function() {
-                var url = "{{url('/')}}/";
+                var cat_id =  $(this).data('id');
+                var url="{{url('/')}}/";
                 $.ajax({
                     url: url+"categories"+"/"+cat_id+"/edit",
                     method: "GET",
@@ -168,10 +169,9 @@
             $(document).on('click','#updateCategory',function() {
                 var url = "{{url('/')}}/";
                 if(confirm('Are you sure you want to update')){
-                    var url = "{{url('/')}}/";
                     $.ajax({
-                        url: "{{ url('edit-category') }}",
-                        method: "POST",
+                        method: 'PUT',
+                        url: url+"categories"+"/"+$(this).val(),
                         data: $("#updateForm").serialize(),
                         success: function(res){
                             toastr.success(res.message);

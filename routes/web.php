@@ -25,6 +25,11 @@ Route::middleware(['role:admin'])->group(function () {
     Route::resource('categories',CategoryCon::class);
     Route::get('category-list',[CategoryCon::class,'getAllCategories']);
 
+    Route::resource('products',ProductCon::class);
+    Route::get('product-list',[ProductCon::class,'getAllProducts']);
+
+
+
     Route::get('/dashboard', function () {
         return view('dashboard');
     });
