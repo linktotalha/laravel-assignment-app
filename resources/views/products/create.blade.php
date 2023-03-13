@@ -17,6 +17,7 @@
                         <div class="modal-body">
                             <form id="updateForm" enctype="multipart/form-data">
                                 @csrf
+                                @method('PUT')
                                 <div class="form-group">
                                     <label for="">Name</label>
                                     <input type="text" name="edit_name" class="form-control" id="">
@@ -28,12 +29,12 @@
                                     <input type="text" name="edit_price" class="form-control" id="">
                                     <span class="priceErr text-danger"></span>
                                 </div>
-                
+
                                 <div class="form-group">
                                     <label for="">Select Category</label>
                                     <select class="form-select" multiple="multiple" name="edit_category[]" id="edit_cat">
                                         @foreach ($categories as $category)
-                                            <option value="{{$category->id}}">{{$category->name}}</option>
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
                                         @endforeach
                                     </select>
                                     <span class="catErr text-danger"></span>
@@ -41,7 +42,7 @@
                                 <div class="form-group">
                                     <label for="">Image</label>
                                     <div id="updateImg"></div>
-                                    <input type="file" name="image[]" class="form-control" id="" multiple>
+                                    <input type="file" name="edit_image[]" class="form-control" id="" multiple>
                                     <span class="imageErr text-danger"></span>
                                 </div>
                                 <div class="form-group">
@@ -49,12 +50,13 @@
                                     <textarea name="edit_desc" class="form-control" id=""></textarea>
                                     <span class="descErr text-danger"></span>
                                 </div>
-                            </form>
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" id="updatePro" class="btn btn-primary">Save changes</button>
+                            <button type="submit" id="updatePro" class="btn btn-primary">Save changes</button>
                         </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -78,7 +80,7 @@
                     <label for="">Select Category</label>
                     <select class="form-select" multiple="multiple" name="category[]">
                         @foreach ($categories as $category)
-                            <option value="{{$category->id}}">{{$category->name}}</option>
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
                     </select>
                     <span class="catErr text-danger"></span>
@@ -123,7 +125,7 @@
 
         $(document).ready(function() {
 
-            $("#submitForm").on('submit',function(e){
+            $("#submitForm").on('submit', function(e) {
                 e.preventDefault();
                 $.ajax({
                     method: "POST",
@@ -149,7 +151,7 @@
                     }
                 });
 
-                
+
             });
 
             // get products from data ajax
@@ -158,10 +160,18 @@
                 processing: true,
                 serverSide: true,
                 ajax: "{{ url('product-list') }}",
-                columns: [
-                    {data: 'name', name: 'name'},
-                    {data: 'price', name: 'price'},
-                    {data: 'desc', name: 'desc'},
+                columns: [{
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'price',
+                        name: 'price'
+                    },
+                    {
+                        data: 'desc',
+                        name: 'desc'
+                    },
                     {
                         "data": null,
                         render: function(data, type, row) {
@@ -180,15 +190,15 @@
             // Delete Product using ajax
 
             $(document).on('click', '#deleteBtn', function() {
-                var url = "{{url('/')}}/";
+                var url = "{{ url('/') }}/";
                 var token = $("meta[name='csrf-token']").attr("content");
                 if (confirm("Are you sure you want to delete??")) {
                     $.ajax({
-                        url: url+"products"+"/"+$(this).data('id'),
+                        url: url + "products" + "/" + $(this).data('id'),
                         type: "DELETE",
                         data: {
                             "id": $(this).data('id'),
-                            "_token":token
+                            "_token": token
                         },
                         success: function(res) {
                             console.log(res);
@@ -202,57 +212,65 @@
             // Edit Products
 
             $(document).on('click', '#editPro', function() {
-                var cat_id =  $(this).data('id');
-                var url="{{url('/')}}/";
+                var cat_id = $(this).data('id');
+                var url = "{{ url('/') }}/";
                 $.ajax({
-                    url: url+"products"+"/"+cat_id+"/edit",
+                    url: url + "products" + "/" + cat_id + "/edit",
                     method: "GET",
                     data: {
                         "id": $(this).data('id')
                     },
                     success: function(res) {
-                        $("#edit_cat option").each(function(index,element){
-                            $(res.product[0].categories).each(function(i,e){
-                                if(parseInt(element.value) == e.category_id){
-                                    $('#edit_cat').append( '<option value="'+element.value+'" selected>'+$("#edit_cat option[value="+element.value+"]").text()+'</option>' );
+                        $("#edit_cat option").each(function(index, element) {
+                            $(res.categories).each(function(i, e) {
+                                if (parseInt(element.value) == e.id) {
+                                    $(this).attr('selected', true);
                                 }
 
-
-                         });
+                            });
 
                         });
-                        $('input[name="edit_id"]').val(res.product[0].id);
-                        $('input[name="edit_name"]').val(res.product[0].name);
-                        $('input[name="edit_price"]').val(res.product[0].price);
-                        $('textarea[name="edit_desc"]').val(res.product[0].desc);
+                        $('input[name="edit_id"]').val(res.id);
+                        $('input[name="edit_name"]').val(res.name);
+                        $('input[name="edit_price"]').val(res.price);
+                        $('textarea[name="edit_desc"]').val(res.desc);
+                        $('input[name="edit_id"]').val(res.id);
                     }
                 });
-            });
-
-            $(document).on('click','#updatePro',function() {
-                var url="{{url('/')}}/";
-                if(confirm('Are you sure you want to update')){
-                   
-                    $.ajax({
-                        url: url+"products"+"/"+$(this).val(),
-
-                        data: $("#updateForm").serialize(),
-                        success: function(res){
-                            console.log(res);
-                            table.ajax.reload();
-                            $('#exampleModal').modal('hide');
-                        }
-                    });
-                }
             });
 
             // 
 
 
+
+            // 
+
+            $("#updateForm").on('submit', function(e) {
+                e.preventDefault();
+                var url = "{{ url('/') }}/";
+                var formData = new FormData(this);
+
+                if (confirm("Are you sure you want to update")) {
+                    $.ajax({
+                        url: url + "products" + "/" + $('input[name="edit_id"]').val(),
+                        data: formData,
+                        type:'POST',
+                        dataType: 'JSON',
+                        contentType: false,
+                        cache: false,
+                        processData: false,
+                        success: function(res) {
+                            toastr.success(res.message);
+                            table.ajax.reload();
+                            $('#exampleModal').modal('hide');
+                        }
+                    });
+                }
+
+
+            });
+
+
         });
-
-
-
-        
     </script>
 @endsection

@@ -14,6 +14,7 @@ use App\Models\ProductImage;
 use App\Models\ProductCategory;
 use Yajra\DataTables\Facades\DataTables;
 use Validator;
+use Image as InterventionImage;
 
 class ProductCon extends Controller
 {
@@ -25,7 +26,7 @@ class ProductCon extends Controller
     public function index()
     {
         $categories = Category::all();
-        return view('products.create',compact('categories'));
+        return view('products.create', compact('categories'));
     }
 
     /**
@@ -46,41 +47,45 @@ class ProductCon extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'name'=>'required',
-            'price'=>'required',
-            'category'=>'required',
-            'image'=>'required|max:2048',
-            'desc'=>'required'
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'price' => 'required',
+            'category' => 'required',
+            'image' => 'required|max:2048',
+            'desc' => 'required',
         ]);
 
-        if($validator->fails()){
-            return response()->json(['errors'=>$validator->errors()]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()]);
         }
 
         $product = Product::create([
-            'name'=>$request->name,
-            'price'=>$request->price,
-            'desc'=>$request->desc,
-            'user_id'=>Auth::id()
+            'name' => $request->name,
+            'price' => $request->price,
+            'desc' => $request->desc,
+            'user_id' => Auth::id(),
         ]);
 
-        foreach($request->category as $category){
+        foreach ($request->category as $category) {
             $product->categories()->attach($category);
         }
 
-
         // multiple images
-        foreach($request->image as $image){
-            // $path = $image->store('public/images');
-            $imageName = time().Str::random(4)."_".$image->getClientOriginalName();
-            $image->move(public_path('images'),$imageName);
+        foreach ($request->image as $image) {
+            $imageName = Str::random(4).time().'.'.$image->extension();
+
+            $img = InterventionImage::make($image->getRealPath());
+            $img->resize(320,240);
+            $img->fit(800,600,function($constraint){
+                $constraint->upsize();
+            });
+            $img->save(public_path('images/').$imageName);
+
             $image = Image::create(['image' => $imageName]);
             $product->images()->attach($image);
         }
 
-        
-        return response()->json(["message"=>"Data added Successfully"]);
+        return response()->json(['message' => 'Data added Successfully']);
     }
 
     /**
@@ -102,9 +107,9 @@ class ProductCon extends Controller
      */
     public function edit($id)
     {
-        $product = Product::with('categories','images')->get();
-        $categories = Category::all();
-        return response()->json(['product'=>$product]);
+        $product = Product::with('categories')->find($id);
+        return $product;
+        return response()->json(['product' => $product]);
     }
 
     /**
@@ -118,16 +123,31 @@ class ProductCon extends Controller
     {
         $data = $request->all();
         $product = Product::find($id);
-        $product->update([
-            'name'->$request->edit_name,
-            'price'=>$request->edit_price,
-            'desc'->$request->edit_desc
-        ]);
+        $product->name = $request->edit_name;
+        $product->price = $request->edit_price;
+        $product->desc = $request->edit_desc;
+        $product->save();
 
-        foreach($request->category as $cat){
-            $product->categories()->sync($cat);
+        $product->categories()->sync($request->edit_category);
+
+        if ($request->hasFile('edit_image')) {
+            $images = $product->images;
+            foreach ($images as $image) {
+                if (File::exists(public_path('images/').$image->image)) {
+                    File::delete(public_path('images/').$image->image);
+                }
+                Image::find($image->id)->delete();
+            }
+            $product->images()->detach();
+            foreach ($request->file('edit_image') as $image) {
+                $product->images()->detach();
+                $imageName = Str::random(4).time().'.'.$image->extension();
+                $image->move(public_path('images/'),$imageName);
+                $image = Image::create(['image' => $imageName]);
+                $product->images()->attach($image);
+            }
         }
-        // $pro_cat = ProductCategory::where('product_id',$product->id)->get();
+        return response()->json(['message' => 'Data updated successfully']);
     }
 
     /**
@@ -139,18 +159,21 @@ class ProductCon extends Controller
     public function destroy($id)
     {
         $product = Product::find($id);
-        foreach($product->images()->get() as $image){
-            if(File::exists(public_path('images/').$image->image)){
+        $images = $product->images;
+        foreach ($images as $image) {
+            if (File::exists(public_path('images/').$image->image)) {
                 File::delete(public_path('images/').$image->image);
             }
+            Image::find($image->id)->delete();
         }
         $product->categories()->detach();
         $product->images()->detach();
         $product->delete();
-        return response()->json(['message'=>"Data deleted successfully"]);
+        return response()->json(['message' => 'Data deleted successfully']);
     }
 
-    public function getAllProducts(){
-        return  DataTables::of(Product::query())->make(true);
+    public function getAllProducts()
+    {
+        return DataTables::of(Product::query())->make(true);
     }
 }
