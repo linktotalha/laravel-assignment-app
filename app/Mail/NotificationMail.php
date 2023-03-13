@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class NotificationMail extends Mailable
+class NotificationMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -28,6 +28,7 @@ class NotificationMail extends Mailable
      */
     public function build()
     {
-        return $this->view('mail.registermail');
+        return $this->subject('Register user')->view('mail.registermail');
+
     }
 }

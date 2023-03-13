@@ -32,7 +32,7 @@ class ApiController extends Controller
             "password"=>Hash::make($request->password)
         ]);
         $accessToken = $user->createToken('authToken')->plainTextToken;
-        // Mail::to('admin@admin.com')->send(new NotificationMail());
+        Mail::to('admin@admin.com')->send(new NotificationMail());
 
         return response([
            "user"=>$user,
