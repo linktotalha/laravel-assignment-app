@@ -153,8 +153,8 @@ class ProductCon extends Controller
         $product = Product::find($id);
         $images = $product->images;
         foreach ($images as $image) {
-            if (File::exists(public_path('images/') . $image->image)) {
-                File::delete(public_path('images/') . $image->image);
+            if (File::exists(public_path('images/').$image->image)) {
+                File::delete(public_path('images/').$image->image);
             }
             Image::find($image->id)->delete();
         }
