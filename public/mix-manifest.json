@@ -7,6 +7,7 @@
     "/js/jquery.min.js": "/js/jquery.min.js",
     "/js/toastr.js": "/js/toastr.js",
     "/css/theme.css": "/css/theme.css",
+    "/css/dashtheme.css": "/css/dashtheme.css",
     "/css/bootstrap.css": "/css/bootstrap.css",
     "/css/jquery.dataTables.css": "/css/jquery.dataTables.css",
     "/css/toastr.css": "/css/toastr.css"

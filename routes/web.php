@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductCon;
 use App\Http\Controllers\CategoryCon;
+use App\Http\Controllers\frontendController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,9 @@ Route::get('/', function () {
 });
 
 // routes only accessable by admin using package spatie
+Route::get('/dashboard', function () {
+    return view('dashboard');
+});
 
 Route::middleware(['role:admin'])->group(function () {
     Route::resource('categories',CategoryCon::class);
@@ -27,12 +31,12 @@ Route::middleware(['role:admin'])->group(function () {
 
     Route::resource('products',ProductCon::class);
     Route::get('product-list',[ProductCon::class,'getAllProducts']);
-
-
-
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    });
 });
+
+Route::get('category-list',[frontendController::class,'categoryList']);
+Route::get('category_products/{id}',[frontendController::class,'categoryproducts']);
+Route::get('product-detail-page/{id}',[frontendController::class,'productdetails']);
+Route::post('add_comment',[frontendController::class,'addcomment']);
+Route::get('comments/{id}',[frontendController::class,'showComments']);
 
 require __DIR__.'/auth.php';

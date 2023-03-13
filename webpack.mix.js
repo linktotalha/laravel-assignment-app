@@ -44,6 +44,10 @@ mix.js('resources/js/app.js', 'public/js')
     ], 'public/css/theme.css');
 
     mix.styles([
+        'resources/theme/css/theme.css',
+    ], 'public/css/dashtheme.css');
+
+    mix.styles([
         'resources/theme/css/bootstrap.min.css',
     ], 'public/css/bootstrap.css');
 
