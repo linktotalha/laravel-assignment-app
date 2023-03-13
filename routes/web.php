@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryCon;
+use App\Http\Controllers\ProductCon;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,13 +19,21 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::middleware(['role:admin'])->group(function () {
+    // Category resource routes
+    Route::resource('categories',CategoryCon::class);
+    Route::get('category-list',[CategoryCon::class,'getAllCategories']);
 
-Route::get('/hello',function() {
-    return view('hello');
+    // Products resource routes
+    Route::resource('products',ProductCon::class);
+    Route::get('product-list',[ProductCon::class,'getAllProducts']);
+
+
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    });
+
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-});
 
 require __DIR__.'/auth.php';
