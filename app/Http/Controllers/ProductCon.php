@@ -71,7 +71,7 @@ class ProductCon extends Controller
 
         // multiple images
         foreach ($request->image as $image) {
-            $imageName = Str::random(4) . time() . '_' . $image->extension();
+            $imageName = Str::random(4).time().'_'.$image->extension();
             $image->move(public_path('images/'), $imageName);
             $image = Image::create(['image' => $imageName]);
             $product->images()->attach($image);
@@ -125,16 +125,16 @@ class ProductCon extends Controller
         if ($request->hasFile('edit_image')) {
             $images = $product->images;
             foreach ($images as $image) {
-                if (File::exists(public_path('images/') . $image->image)) {
-                    File::delete(public_path('images/') . $image->image);
+                if (File::exists(public_path('images/').$image->image)) {
+                    File::delete(public_path('images/').$image->image);
                 }
                 Image::find($image->id)->delete();
             }
             $product->images()->detach();
             foreach ($request->file('edit_image') as $image) {
                 $product->images()->detach();
-                $imageName = Str::random(4) . time() . '_' . $image->extension();
-                $image->move(public_path('images/'), $imageName);
+                $imageName = Str::random(4).time().'_'.$image->extension();
+                $image->move(public_path('images/'),$imageName);
                 $image = Image::create(['image' => $imageName]);
                 $product->images()->attach($image);
             }
