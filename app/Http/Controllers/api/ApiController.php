@@ -31,6 +31,7 @@ class ApiController extends Controller
             "email"=>$request->email,
             "password"=>Hash::make($request->password)
         ]);
+        $user->assignRole('user');
         $accessToken = $user->createToken('authToken')->plainTextToken;
         Mail::to('admin@admin.com')->send(new NotificationMail());
 
