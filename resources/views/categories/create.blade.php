@@ -128,6 +128,7 @@
             // Edit Category display values in modal
 
             $(document).on('click', '#editCat', function() {
+                var url = "{{url('/')}}/";
                 $.ajax({
                     url: url+"categories"+"/"+cat_id+"/edit",
                     method: "GET",
