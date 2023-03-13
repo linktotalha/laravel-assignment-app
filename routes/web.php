@@ -1,11 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CategoryCon;
-use App\Http\Controllers\ProductCon;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\frontendController;
-use App\Http\Controllers\api\ApiController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,15 +17,16 @@ use App\Http\Controllers\api\ApiController;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// routes only accessable by admin using package spatie
+
 Route::middleware(['role:admin'])->group(function () {
-    // Category resource routes
-    Route::resource('categories',CategoryCon::class);
-    Route::get('category-list',[CategoryCon::class,'getAllCategories']);
-
-    // Products resource routes
-    Route::resource('products',ProductCon::class);
-    Route::get('product-list',[ProductCon::class,'getAllProducts']);
-
+    Route::get('categories/create',[CategoryController::class,'create']);
+    Route::post('categories/create',[CategoryController::class,'postCreate']);
+    Route::get('category-list',[CategoryController::class,'list']);
+    Route::get('delete-category',[CategoryController::class,'delete']);
+    Route::get('edit-category',[CategoryController::class,'edit']);
+    Route::post('edit-category',[CategoryController::class,'postEdit']);
 
     Route::get('/dashboard', function () {
         return view('dashboard');

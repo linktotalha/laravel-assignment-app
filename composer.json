@@ -16,8 +16,7 @@
         "laravel/framework": "^8.0",
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.0",
-        "spatie/laravel-permission": "^5.9",
-        "yajra/laravel-datatables": "^1.0"
+        "spatie/laravel-permission": "^5.9"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",
