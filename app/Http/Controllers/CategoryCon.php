@@ -109,6 +109,6 @@ class CategoryCon extends Controller
     }
 
     public function getAllCategories(){
-        return DataTables::of(Category::query())->make(true);
+        return DataTables::of(Category::all())->make(true);
     }
 }

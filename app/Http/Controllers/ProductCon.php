@@ -72,8 +72,7 @@ class ProductCon extends Controller
 
         // multiple images
         foreach($request->image as $image){
-            // $path = $image->store('public/images');
-            $imageName = time().Str::random(4)."_".$image->getClientOriginalName();
+            $imageName = time().Str::random(4)."_".$image->extension();
             $image->move(public_path('images'),$imageName);
             $image = Image::create(['image' => $imageName]);
             $product->images()->attach($image);
