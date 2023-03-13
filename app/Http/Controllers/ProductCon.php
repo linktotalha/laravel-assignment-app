@@ -12,7 +12,7 @@ use App\Models\Category;
 use App\Models\Image;
 use App\Models\ProductImage;
 use App\Models\ProductCategory;
-use Yajra\DataTables\Facades\DataTables;
+// use Yajra\DataTables\Facades\DataTables;
 use Validator;
 use Image as InterventionImage;
 
