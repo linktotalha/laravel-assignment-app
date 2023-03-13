@@ -14,6 +14,7 @@ use App\Models\ProductImage;
 use App\Models\ProductCategory;
 use Yajra\DataTables\Facades\DataTables;
 use Validator;
+use Image as InterventionImage;
 
 class ProductCon extends Controller
 {
@@ -71,8 +72,15 @@ class ProductCon extends Controller
 
         // multiple images
         foreach ($request->image as $image) {
-            $imageName = Str::random(4).time().'_'.$image->extension();
-            $image->move(public_path('images/'), $imageName);
+            $imageName = Str::random(4).time().'.'.$image->extension();
+
+            $img = InterventionImage::make($image->getRealPath());
+            $img->resize(320,240);
+            $img->fit(800,600,function($constraint){
+                $constraint->upsize();
+            });
+            $img->save(public_path('images/').$imageName);
+
             $image = Image::create(['image' => $imageName]);
             $product->images()->attach($image);
         }
@@ -133,7 +141,7 @@ class ProductCon extends Controller
             $product->images()->detach();
             foreach ($request->file('edit_image') as $image) {
                 $product->images()->detach();
-                $imageName = Str::random(4).time().'_'.$image->extension();
+                $imageName = Str::random(4).time().'.'.$image->extension();
                 $image->move(public_path('images/'),$imageName);
                 $image = Image::create(['image' => $imageName]);
                 $product->images()->attach($image);
