@@ -22,7 +22,35 @@ mix.js('resources/js/app.js', 'public/js')
         'resources/theme/js/gd-default.js',
     ], 'public/js/theme.js');
 
+    mix.scripts([
+        'resources/theme/js/bootstrap.min.js',
+    ], 'public/js/bootstrap.js');
+
+    mix.scripts([
+        'resources/theme/js/jquery.dataTables.min.js',
+    ], 'public/js/jquery.dataTables.js');
+
+    mix.scripts([
+        'resources/theme/js/jquery.min.js',
+    ], 'public/js/jquery.min.js');
+
+    mix.scripts([
+        'resources/theme/js/toastr.min.js',
+    ], 'public/js/toastr.js');
+
     mix.styles([
         'resources/theme/css/dashlite.css',
         'resources/theme/css/theme.css',
     ], 'public/css/theme.css');
+
+    mix.styles([
+        'resources/theme/css/bootstrap.min.css',
+    ], 'public/css/bootstrap.css');
+
+    mix.styles([
+        'resources/theme/css/jquery.dataTables.min.css',
+    ], 'public/css/jquery.dataTables.css');
+
+    mix.styles([
+        'resources/theme/css/toastr.min.css',
+    ], 'public/css/toastr.css');
